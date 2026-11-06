@@ -119,15 +119,24 @@ Scanned from the raw material roll label (Tageos) when the roll is loaded.
 The label is inside the core and is peeled off at load.
 - **Lot number** — the only barcode on the label, e.g. `8000456411`
 - **Product code** — printed text, e.g. `3000000223`
-- **Qty good** — printed text, e.g. `9000` (also Qty bad, Yield, Row).
-  **Not in the barcode.** Lot size depends on the raw material (9,000 for
-  `TGTG030000223`, 20,000 for `TGTG045000048`), so the product table holds
-  a default per product; the operator confirms or overrides at the scan.
-  This drives all remainder math.
+- **Qty good** — printed text, e.g. `9000`. **Not in the barcode, and not
+  needed:** a full lot of a given raw material always holds the same
+  number (9,000 for `TGTG030000223`, 20,000 for `TGTG045000048`), so it
+  comes from the product table.
+- **Partly used lots:** an order can finish with labels left on a lot,
+  and that lot is used again on a later order. Its remaining quantity
+  comes from Sage, which shows how many are left when the lot is used
+  again. Hermes also keeps its own lot ledger (every quantity it posts
+  against a lot); once a lot has been through Hermes, the ledger and Sage
+  must agree, or Hermes halts.
+
+Starting quantity for the remainder math = full lot size for a lot never
+used before, otherwise Sage's remaining quantity.
 
 ### Product code → Sage raw material
-A lookup table in config, e.g. `3000000223` → `TGTG030000223` (default
-lot size 9,000). The product code for `TGTG045000048` is still needed. Each Sage
+A lookup table in config: product code → Sage raw material item → full
+lot size, e.g. `3000000223` → `TGTG030000223` → 9,000. The product code
+for `TGTG045000048` (20,000) is still needed. Each Sage
 order already shows its Raw Material ItemNo, so Hermes checks that the
 scanned lot matches the order. An unknown product code or a mismatch
 halts. No derived mapping rule.
@@ -233,5 +242,7 @@ machine. Hand finished rolls to easyQC's Cores tab for core labels.
   admin consent. Fallbacks: Office Scripts via Power Automate, or driving
   Excel for the web
 - Can Python be installed on the production PC and the Sage host?
+- Where Sage shows a lot's remaining quantity (the Lot No lookup?), and
+  how Hermes tells a fresh lot from a partly used one
 - Exact steps and pop-ups when entering a roll in the Sage Production
   window (video pending)

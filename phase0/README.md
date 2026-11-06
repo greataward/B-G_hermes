@@ -45,6 +45,10 @@ No Hermes code until these are answered. Findings go here with the date.
       rolls are recorded as if none were lost. (2026-11-06)
 - [x] **Encoprint granularity:** one work order per UPC, not per roll.
       (2026-11-06)
+- [x] **Lot size** is fixed per raw material; leftovers on a lot carry
+      to a later order, and Sage shows what's left. (2026-11-06)
+- [ ] **Sage lot remaining:** screenshot of where Sage shows a partly used
+      lot's remaining quantity
 - [ ] **Count tolerance:** how far Encoprint may differ from the lot
       arithmetic before Hermes halts
 
