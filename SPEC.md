@@ -140,8 +140,15 @@ used before, otherwise Sage's remaining quantity.
 
 ### Product code → Sage raw material
 A lookup table in config: product code → Sage raw material item → full
-lot size, e.g. `3000000223` → `TGTG030000223` → 9,000. The product code
-for `TGTG045000048` (20,000) is still needed. Each Sage
+lot size:
+
+| Product code | Sage raw material | Full lot |
+|---|---|---|
+| `3000000223` | `TGTG030000223` | 9,000 |
+| `4500000048` | `TGTG045000048` | 20,000 |
+
+The codes follow a pattern (`TGTG0` + first 2 digits + last 6 digits), but
+Hermes still uses the table and halts on a code that isn't in it. Each Sage
 order already shows its Raw Material ItemNo, so Hermes checks that the
 scanned lot matches the order. An unknown product code or a mismatch
 halts. No derived mapping rule.
