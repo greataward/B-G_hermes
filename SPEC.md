@@ -51,7 +51,7 @@ the conflict to a human as a **pop-up on the production PC**.
 
 ### Notes per system
 
-**Encoprint** — organized by MO_NO and SKU. MO_NO is
+**Encoprint** — one work order per UPC (not per roll), organized by MO_NO and SKU. MO_NO is
 `SEQ<order>-<timestamp>`, e.g. `SEQ200112021-20261105091307` for order
 `200112021`, so the order number can be read from it. Shows Total /
 Passed / Total Failures per MO and per SKU, a real-time Total / Pass /
@@ -121,10 +121,15 @@ Lot identity comes from the scan — no estimation. **Lot arithmetic is the
 source of truth** for the split: the lot carried X, earlier rolls used Y,
 the remainder X − Y goes to this roll, the next lot covers the rest.
 
-Encoprint counts are a **check, not a source.** If the count between lot
-scans disagrees with the arithmetic, something happened — a missed
-changeover scan, a reprint, a jam, labels lost at a splice. Halt and show
-it.
+Labels lost at a lot splice (a couple per splice) are **ignored**: the
+roll is recorded as if none were lost.
+
+Encoprint counts are a **check, not a source.** Encoprint keeps one work
+order per UPC, not per roll, so Hermes takes the roll's count as the
+difference in that work order's count between the previous roll-complete
+scan and this one. If that disagrees with the arithmetic by more than the
+tolerance, something happened — a missed changeover scan, a reprint, a
+jam. Halt and show it.
 
 Example of what this catches: in order 200112021 a lot was entered as
 4,043 + 4,961 = 9,004 against a 9,000 label.
@@ -197,13 +202,11 @@ machine. Hand finished rolls to easyQC's Cores tab for core labels.
 
 ## 9. Open questions
 
-- Encoprint export: file format, where it is written, whether it can be
-  read while Encoprint is running
-- Count tolerance: Encoprint passed for SKU `618842550500` was 38,111
-  against 38,106 expected (4 × 9,000 + 2,106 in progress). Where do the
-  extra 5 come from — test prints, reprints?
-- Are labels lost at a lot splice? If so, the arithmetic needs to allow
-  for them
+- Encoprint export: file format (CSV coming), whether it has per-label
+  timestamps, whether it can be read while Encoprint is running
+- Count tolerance: how far Encoprint may differ from the arithmetic
+  before Hermes halts. Splice losses make Encoprint run a few labels
+  short; one snapshot also showed 5 more passes than expected
 - Graph access: an app registration in Microsoft Entra usually needs IT
   admin consent. Fallbacks: Office Scripts via Power Automate, or driving
   Excel for the web

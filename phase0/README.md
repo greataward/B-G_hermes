@@ -23,8 +23,8 @@ No Hermes code until these are answered. Findings go here with the date.
 - [x] **Python on the production PC** — not installed. (2026-11-06)
 - [ ] **Video: entering one roll** in the Production Planner, QC file and
       Sage, start to finish (recorded, to be added)
-- [ ] **Encoprint export** for one known roll, plus that roll's numbers as
-      entered in the Planner and Sage → `fixtures/`
+- [ ] **Encoprint export** (per UPC work order), plus the numbers entered
+      by hand for that UPC's rolls in the Planner and Sage → `fixtures/`
 - [ ] **Graph:** write one cell to the open log sheet. Does it land
       without a reload and without a file-in-use prompt? (Needs an Entra
       app registration first — ask IT.)
@@ -32,9 +32,12 @@ No Hermes code until these are answered. Findings go here with the date.
       remote session; can Python be installed there?
 - [ ] **Production PC:** Settings → System → About; can Python be
       installed for the current user?
-- [ ] **Splice waste:** are labels lost when a new lot is spliced in?
-- [ ] **Count tolerance:** where the 5 extra Encoprint passes in order
-      200112021 came from
+- [x] **Splice waste:** a couple of labels are lost per splice; ignored,
+      rolls are recorded as if none were lost. (2026-11-06)
+- [x] **Encoprint granularity:** one work order per UPC, not per roll.
+      (2026-11-06)
+- [ ] **Count tolerance:** how far Encoprint may differ from the lot
+      arithmetic before Hermes halts
 
 ## Evidence (2026-11-06, order 200112021, SKU 618842550500)
 
