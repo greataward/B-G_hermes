@@ -23,8 +23,16 @@ No Hermes code until these are answered. Findings go here with the date.
 - [x] **Python on the production PC** — not installed. (2026-11-06)
 - [ ] **Video: entering one roll** in the Production Planner, QC file and
       Sage, start to finish (recorded, to be added)
-- [ ] **Encoprint export** (per UPC work order), plus the numbers entered
-      by hand for that UPC's rolls in the Planner and Sage → `fixtures/`
+- [x] **Encoprint export** — per-label CSV, generated only on request
+      (button in the Work Order panel) into `C:\US001\Finished_report`.
+      Sample in `fixtures/200112040-750045001271/`. Roll 1 = exactly
+      15,000 labels, matching the QC sheet. (2026-11-06)
+- [ ] **Hand-entered numbers** for roll 1 of order 200112040 (lots and
+      quantities in the Planner and Sage) to go with the sample
+- [ ] **Read Completed Quantity** from the Encoprint window with UI
+      Automation (needs Python or AutoHotkey on the production PC)
+- [ ] **Encoprint live data:** sort `C:\US001\Current` and
+      `C:\US001\DataParameter` by date modified while printing
 - [ ] **Graph:** write one cell to the open log sheet. Does it land
       without a reload and without a file-in-use prompt? (Needs an Entra
       app registration first — ask IT.)

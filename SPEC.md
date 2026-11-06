@@ -42,7 +42,7 @@ the conflict to a human as a **pop-up on the production PC**.
 
 | System | Role in Hermes | Access |
 |---|---|---|
-| Encoprint (v4.10.1) | **The count source.** Encode/verify per label, also checks the vision OCR | CSV export / log — **file format TBD** |
+| Encoprint (v4.10.1) | **The count source.** Encode/verify per label, also checks the vision OCR | On-screen counters; per-label CSV on request |
 | Vision app (V3.51) | Not a source. Its Record button is a searchable history of NG images, not live counts | — |
 | G6 print program | Not a source. Holds the artwork records; never looked at | — |
 | Production Planner | Per-roll production record | Excel for the web (SharePoint) → Graph |
@@ -57,8 +57,24 @@ the conflict to a human as a **pop-up on the production PC**.
 Passed / Total Failures per MO and per SKU, a real-time Total / Pass /
 Write Fail / Visual Fail block, and a per-EPC PASS result table. Its log
 shows `Visual data=<UPC> … Successful alignment` for every label, so it
-already cross-checks the vision camera. Has Save / Save As. **Need a real
-export for one known roll.**
+already cross-checks the vision camera.
+
+- The work order panel header reads `SKU_<UPC> Target quantity: <n>
+  Completed Quantity: <n>`. That running count is what Hermes needs.
+- **The CSV is not written automatically.** It is generated on request
+  with a button in the Work Order panel (log line `[<MO_NO>]The data file
+  has been loaded!`) and lands in `C:\US001\Finished_report\<MO_NO>.csv`.
+- The CSV has one row per label for the whole order (299,999 rows, 70 MB
+  for a 300,000 order), most `UNPROCESSED` until printed. Processed rows
+  have `STATUS` (PASS / FAIL_VISION / …), `EQ_TIME` (ms timestamp),
+  `OCRCODE`, `EPC`, `TID`. A retried label keeps only its last result, so
+  counts never double. See `fixtures/200112040-750045001271/`.
+- **How Hermes reads it:** at each lot scan and roll-complete scan, read
+  Completed Quantity from the Encoprint window (UI Automation on the
+  production PC, no RDP involved). Request the CSV only when a halt needs
+  investigating, or at the end of an order. Fallback if the window text
+  can't be read: Hermes presses the export button itself after the
+  machine stops.
 
 **Production Planner / QC file** — both are open in Excel for the web on
 the production PC, not desktop Excel, so writes through Graph should
@@ -202,8 +218,10 @@ machine. Hand finished rolls to easyQC's Cores tab for core labels.
 
 ## 9. Open questions
 
-- Encoprint export: file format (CSV coming), whether it has per-label
-  timestamps, whether it can be read while Encoprint is running
+- Can UI Automation read Completed Quantity from the Encoprint window?
+- Does Encoprint keep live data somewhere Hermes can read without the
+  button (e.g. `C:\US001\Current`, `DataParameter`)? Sort those folders by
+  date modified while it runs
 - Count tolerance: how far Encoprint may differ from the arithmetic
   before Hermes halts. Splice losses make Encoprint run a few labels
   short; one snapshot also showed 5 more passes than expected
