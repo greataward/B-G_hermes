@@ -107,7 +107,12 @@ reached by Remote Desktop from the production PC. Entries are
   Roll rows for the order already exist; entry fills Lot No, Qty Already
   Printed and Qty Scrapped. Finished rows have Qty to Print 0. Operators
   sometimes pre-load the next roll (Lot No + Qty to Print) before it runs;
-  **Hermes only ever enters rolls that are complete.** How a pre-loaded
+  **Hermes only ever enters rolls that are complete.**
+  When a quantity is confirmed (Enter), Sage fills in the **lowest** of:
+  the number typed, the number still required for the roll, and the
+  number remaining on the lot. Hermes types its own computed quantity, and
+  read-back must show exactly that number; if Sage lowered it, Sage and
+  Hermes disagree about the lot or the roll, so Hermes halts. How a pre-loaded
   row turns into a finished one is in the pending video.
 - The grid is a .NET grid ("Contains:" filter row), so UI Automation run
   *inside* the session should be able to read cells as text.
@@ -242,7 +247,7 @@ machine. Hand finished rolls to easyQC's Cores tab for core labels.
   admin consent. Fallbacks: Office Scripts via Power Automate, or driving
   Excel for the web
 - Can Python be installed on the production PC and the Sage host?
-- Where Sage shows a lot's remaining quantity (the Lot No lookup?), and
-  how Hermes tells a fresh lot from a partly used one
+- How Hermes reads a partly used lot's remaining quantity before typing
+  (Sage clamps to it on Enter; see video)
 - Exact steps and pop-ups when entering a roll in the Sage Production
   window (video pending)

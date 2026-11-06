@@ -47,8 +47,9 @@ No Hermes code until these are answered. Findings go here with the date.
       (2026-11-06)
 - [x] **Lot size** is fixed per raw material; leftovers on a lot carry
       to a later order, and Sage shows what's left. (2026-11-06)
-- [ ] **Sage lot remaining:** screenshot of where Sage shows a partly used
-      lot's remaining quantity
+- [x] **Sage lot remaining:** on Enter, Sage fills the lowest of the
+      typed number, the roll's remaining need and the lot's remaining
+      quantity. Details in the pending video. (2026-11-06)
 - [ ] **Count tolerance:** how far Encoprint may differ from the lot
       arithmetic before Hermes halts
 
