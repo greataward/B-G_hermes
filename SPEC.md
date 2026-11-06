@@ -80,9 +80,10 @@ already cross-checks the vision camera.
 the production PC, not desktop Excel, so writes through Graph should
 appear without a reload. Layouts (from screenshots; confirm from video):
 - Planner: one block per UPC, one column per roll, rows Quantity, Date,
-  Lot 1, Qty 1, Lot 2, Qty 2, Initials.
+  Lot 1, Qty 1, Lot 2, Qty 2, Initials (e.g. `KB P-HS`). Date as `11/6`.
 - QC file: one block per UPC, one row per roll, columns qty, Date, Ship #,
-  Notes, Tech.
+  Notes, Tech (e.g. `KB QC-HS`). Date as `11/6/2026`.
+- Example of all three filled in: `fixtures/200112040-750045001271/entered.txt`.
 
 **Sage 300** — database and API access are blocked and will not be
 granted. Entry happens in the **Production** window of the
@@ -104,7 +105,10 @@ reached by Remote Desktop from the production PC. Entries are
   Rotate 180, Qty Already Printed, Qty Scrapped, Test Print, Print, Print
   Result, Order Number, Item, Raw Material ItemNo, RePrint, LoftwareCode.
   Roll rows for the order already exist; entry fills Lot No, Qty Already
-  Printed and Qty Scrapped.
+  Printed and Qty Scrapped. Finished rows have Qty to Print 0. Operators
+  sometimes pre-load the next roll (Lot No + Qty to Print) before it runs;
+  **Hermes only ever enters rolls that are complete.** How a pre-loaded
+  row turns into a finished one is in the pending video.
 - The grid is a .NET grid ("Contains:" filter row), so UI Automation run
   *inside* the session should be able to read cells as text.
 
@@ -116,11 +120,14 @@ The label is inside the core and is peeled off at load.
 - **Lot number** — the only barcode on the label, e.g. `8000456411`
 - **Product code** — printed text, e.g. `3000000223`
 - **Qty good** — printed text, e.g. `9000` (also Qty bad, Yield, Row).
-  **Not in the barcode.** Default 9000; operator confirms or overrides.
+  **Not in the barcode.** Lot size depends on the raw material (9,000 for
+  `TGTG030000223`, 20,000 for `TGTG045000048`), so the product table holds
+  a default per product; the operator confirms or overrides at the scan.
   This drives all remainder math.
 
 ### Product code → Sage raw material
-A lookup table in config, e.g. `3000000223` → `TGTG030000223`. Each Sage
+A lookup table in config, e.g. `3000000223` → `TGTG030000223` (default
+lot size 9,000). The product code for `TGTG045000048` is still needed. Each Sage
 order already shows its Raw Material ItemNo, so Hermes checks that the
 scanned lot matches the order. An unknown product code or a mismatch
 halts. No derived mapping rule.
@@ -219,9 +226,6 @@ machine. Hand finished rolls to easyQC's Cores tab for core labels.
 ## 9. Open questions
 
 - Can UI Automation read Completed Quantity from the Encoprint window?
-- Does Encoprint keep live data somewhere Hermes can read without the
-  button (e.g. `C:\US001\Current`, `DataParameter`)? Sort those folders by
-  date modified while it runs
 - Count tolerance: how far Encoprint may differ from the arithmetic
   before Hermes halts. Splice losses make Encoprint run a few labels
   short; one snapshot also showed 5 more passes than expected

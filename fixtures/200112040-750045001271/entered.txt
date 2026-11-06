@@ -1,0 +1,25 @@
+Hand-entered values for order 200112040, UPC 750045001271 (screenshot 2026-11-06)
+Raw material TGTG045000048. Rolls are 15,000. Lots on this order hold 20,000.
+
+Only roll 1 falls inside the Encoprint sample (SN 0-14999). Roll 2 and the
+roll 3 values below were entered after the sample was exported, and roll 3
+is pre-loaded (not yet printed). Hermes must only enter completed rolls.
+
+Production Planner (column per roll)
+  Roll 1: Quantity 15,000  Date 11/6  Lot 1 8000461379  Qty 1 15,000                              Initials "KB P-HS"
+  Roll 2: Quantity 15,000  Date 11/6  Lot 1 8000461379  Qty 1  5,000  Lot 2 8000461671  Qty 2 10,000  Initials "KB P-HS"
+  Roll 3: (pre-loaded)     Date 11/6  Lot 1 8000461671  Qty 1 10,000  Qty 2 "(add 5,000)"          Initials "KB P-HS"
+
+QC File - Horiz UPC (row per roll)
+  Roll 1: 15000  11/6/2026  Tech "KB QC-HS"
+  Roll 2: 15000  11/6/2026  Tech "KB QC-HS"
+
+Sage Production window (row per lot per roll)
+  Top row: SCOTWOOD, 11/5/2026, Max Roll Quantity 15,000, Qty Order Allowed 500,750,
+           Roll Count 34, Completed "30,000 of 500,000 - 6.00%"
+  Roll 1  Lot 8000461379  Qty to Print 0      Qty Already Printed 15000  Scrapped 0
+  Roll 2  Lot 8000461379  Qty to Print 0      Qty Already Printed  5000  Scrapped 0
+  Roll 2  Lot 8000461671  Qty to Print 0      Qty Already Printed 10000  Scrapped 0
+  Roll 3  Lot 8000461671  Qty to Print 10000  Qty Already Printed     0  Scrapped 0   (pre-loaded)
+
+Lot arithmetic check: 8000461379 = 15,000 + 5,000 = 20,000 (used up); 8000461671 gave 10,000 to roll 2.

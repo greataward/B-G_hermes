@@ -27,12 +27,13 @@ No Hermes code until these are answered. Findings go here with the date.
       (button in the Work Order panel) into `C:\US001\Finished_report`.
       Sample in `fixtures/200112040-750045001271/`. Roll 1 = exactly
       15,000 labels, matching the QC sheet. (2026-11-06)
-- [ ] **Hand-entered numbers** for roll 1 of order 200112040 (lots and
-      quantities in the Planner and Sage) to go with the sample
+- [x] **Hand-entered numbers** for order 200112040 →
+      `fixtures/200112040-750045001271/entered.txt`. Lots on this product
+      hold 20,000, not 9,000. (2026-11-06)
 - [ ] **Read Completed Quantity** from the Encoprint window with UI
       Automation (needs Python or AutoHotkey on the production PC)
-- [ ] **Encoprint live data:** sort `C:\US001\Current` and
-      `C:\US001\DataParameter` by date modified while printing
+- [x] **Encoprint live data:** nothing in `C:\US001` is updated while
+      printing; reading the window is the plan. (2026-11-06)
 - [ ] **Graph:** write one cell to the open log sheet. Does it land
       without a reload and without a file-in-use prompt? (Needs an Entra
       app registration first — ask IT.)
