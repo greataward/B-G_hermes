@@ -75,8 +75,8 @@ already cross-checks the vision camera.
   have `STATUS` (PASS / FAIL_VISION / …), `EQ_TIME` (ms timestamp),
   `OCRCODE`, `EPC`, `TID`. A retried label keeps only its last result, so
   counts never double. See `fixtures/200112040-750045001271/`.
-- **How Hermes reads it:** at each lot scan and roll-complete scan, read
-  Completed Quantity from the Encoprint window (UI Automation on the
+- **How Hermes reads it:** it watches Completed Quantity in the Encoprint
+  window (UI Automation on the
   production PC, no RDP involved). Request the CSV only when a halt needs
   investigating, or at the end of an order. Fallback if the window text
   can't be read: Hermes presses the export button itself after the
@@ -202,15 +202,25 @@ Lot identity comes from the scan — no estimation. **Lot arithmetic is the
 source of truth** for the split: the lot carried X, earlier rolls used Y,
 the remainder X − Y goes to this roll, the next lot covers the rest.
 
-Labels lost at a lot splice (a couple per splice) are **ignored**: the
-roll is recorded as if none were lost.
+**Splices:** the machine pauses with roughly 200–300 labels left on the
+old lot and the new lot is spliced onto it; those last labels still run
+through the machine. So the exact point where one lot ends inside a roll
+is fuzzy, and neither the lot scan's time nor Encoprint's count marks it.
+That is fine: the split comes only from the lot arithmetic, with every lot
+counted as full. The couple of labels lost per splice are **ignored**.
 
-Encoprint counts are a **check, not a source.** Encoprint keeps one work
-order per UPC, not per roll, so Hermes takes the roll's count as the
-difference in that work order's count between the previous roll-complete
-scan and this one. If that disagrees with the arithmetic by more than the
-tolerance, something happened — a missed changeover scan, a reprint, a
-jam. Halt and show it.
+**Roll end:** rolls are a fixed size (e.g. 15,000), and the line stops at
+exactly that count (seen in the Encoprint sample at SN 15000). Hermes
+treats a roll as finished when the work order's count reaches the next
+multiple of the roll size. A `ROLL COMPLETE` barcode card stays as a
+manual override (e.g. a short last roll).
+
+Encoprint counts are a **check on the roll total only**, never on the lot
+split. Encoprint keeps one work order per UPC, not per roll, so the roll's
+count is the difference in that work order's count between the previous
+roll end and this one. If that is off from the roll size by more than the
+tolerance, something happened — a jam, a reprint run, a missed lot scan.
+Halt and show it.
 
 Example of what this catches: in order 200112021 a lot was entered as
 4,043 + 4,961 = 9,004 against a 9,000 label.
@@ -221,10 +231,11 @@ Ordered so that cheap-to-fix surfaces are written before the irreversible
 one.
 
 1. **Lot scan** at load — lot number, product code, qty good, timestamp
-2. **Roll complete** — operator marks it (scan a `ROLL COMPLETE` card)
-3. **Read** the Encoprint data for the window
-4. **Reconcile** — Encoprint count agrees with lot arithmetic, within the
-   tolerance (±10 labels per roll)
+2. **Roll end** — Encoprint's count reaches the roll size (or the operator
+   scans the `ROLL COMPLETE` card)
+3. **Read** Encoprint's count for the roll
+4. **Reconcile** — the roll's Encoprint count matches the roll quantity
+   within ±10 labels, and the lot arithmetic covers the roll
 5. **Write Production Planner** (reversible)
 6. **Write QC sheet** (reversible)
 7. **Stage Sage entry** — show exact values, human approves (PoC phase)
