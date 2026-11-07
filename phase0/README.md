@@ -21,8 +21,16 @@ No Hermes code until these are answered. Findings go here with the date.
 - [x] **Can programs run on the Sage host?** Yes. Shared occasionally,
       never during production. (2026-11-06)
 - [x] **Python on the production PC** — not installed. (2026-11-06)
-- [ ] **Video: entering one roll** in the Production Planner, QC file and
-      Sage, start to finish (recorded, to be added)
+- [x] **Video: entering one roll** in the Production Planner, QC file and
+      Sage (roll 1 of 200112040). Steps written into `SPEC.md` §3.
+      (2026-11-07)
+- [ ] **Encoprint's own data file:** its log says "The csv data file has
+      been updated" at times. Find where (start with CaseSetting → Excel
+      Path)
+- [ ] **Sage two-lot roll:** how the second row for the same roll is
+      created
+- [ ] **Sage Print button:** confirm it only records the roll and
+      nothing physically prints
 - [x] **Encoprint export** — per-label CSV, generated only on request
       (button in the Work Order panel) into `C:\US001\Finished_report`.
       Sample in `fixtures/200112040-750045001271/`. Roll 1 = exactly

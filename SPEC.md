@@ -61,6 +61,12 @@ already cross-checks the vision camera.
 
 - The work order panel header reads `SKU_<UPC> Target quantity: <n>
   Completed Quantity: <n>`. That running count is what Hermes needs.
+- Encoprint's log also shows lines like `[<MO_NO>]->The csv data file has
+  been updated` and `->The zip data file has been updated`, next to
+  `Saving the success count:…` and `Restored count: 3, please clean up
+  tags in time`. So Encoprint does save a data file by itself at some
+  points (probably on stop). **Where is still unknown**; the CaseSetting
+  "Excel Path" (`C:\Users\xinyi\OneDrive - B…`) is the first place to look.
 - **The CSV is not written automatically.** It is generated on request
   with a button in the Work Order panel (log line `[<MO_NO>]The data file
   has been loaded!`) and lands in `C:\US001\Finished_report\<MO_NO>.csv`.
@@ -78,11 +84,20 @@ already cross-checks the vision camera.
 
 **Production Planner / QC file** — both are open in Excel for the web on
 the production PC, not desktop Excel, so writes through Graph should
-appear without a reload. Layouts (from screenshots; confirm from video):
-- Planner: one block per UPC, one column per roll, rows Quantity, Date,
-  Lot 1, Qty 1, Lot 2, Qty 2, Initials (e.g. `KB P-HS`). Date as `11/6`.
-- QC file: one block per UPC, one row per roll, columns qty, Date, Ship #,
-  Notes, Tech (e.g. `KB QC-HS`). Date as `11/6/2026`.
+appear without a reload. Both are tabs of the order's Log Sheet workbook
+(e.g. `200112040 - Log Sheet`). Layouts and manual steps (from the
+2026-11-06 video):
+- **Planner:** one block per UPC, one column per roll. Rows Quantity
+  (pre-filled, e.g. 15,000), Scan Grade and Note (hidden unless toggled
+  with the Scan / Note / Lot/Qty 2 checkboxes), Date, Lot 1, Qty 1, Lot 2,
+  Qty 2, Initials. Per roll the operator fills: Date (date picker, shows
+  `11/6`), Lot 1, Qty 1, Lot 2 + Qty 2 if the roll spans two lots (when
+  Qty 1 is short the sheet shows a hint like `(add 13,500)` in Qty 2), and
+  Initials from a dropdown (`KB P-1` … `KB P-4`, `KB P-HS`; HS = high
+  speed).
+- **QC file:** one block per UPC, one row per roll, columns qty, Date,
+  Ship #, Notes, Tech. Per roll: qty (`15000`), Date (`11/6/2026`), Tech
+  from a dropdown (`KB QC-1` … `KB QC-HS`).
 - Example of all three filled in: `fixtures/200112040-750045001271/entered.txt`.
 
 **Sage 300** — database and API access are blocked and will not be
@@ -112,8 +127,23 @@ reached by Remote Desktop from the production PC. Entries are
   the number typed, the number still required for the roll, and the
   number remaining on the lot. Hermes types its own computed quantity, and
   read-back must show exactly that number; if Sage lowered it, Sage and
-  Hermes disagree about the lot or the roll, so Hermes halts. How a pre-loaded
-  row turns into a finished one is in the pending video.
+  Hermes disagree about the lot or the roll, so Hermes halts.
+- **Entering one roll (from the 2026-11-06 video):**
+  1. Top bar: Get Date = the order date, Print Room = `High Speed`,
+     Operator = the operator; Get Data; expand the order and select the
+     item row.
+  2. In the roll's row: Printer = `High Speed` (dropdown).
+  3. Lot No: scan the lot label's barcode with the scanner (it types the
+     number in), or use the lookup button.
+  4. Qty to Print: type the quantity, Enter. Sage clamps it (see above).
+     At this point the row is "pre-loaded".
+  5. Press the row's **Print** button. A **Print Results** dialog asks for
+     Print Count and Scrap Count; enter the quantity and `0`, press Ok.
+  6. The row now shows Qty to Print 0 and Qty Already Printed = the
+     quantity, and Completed Label % goes up (e.g. `15,000 of 500,000 -
+     3.00%`).
+  Step 5 is the point of no return. Hermes reads back after step 4 (the
+  clamped number) and again after step 6.
 - The grid is a .NET grid ("Contains:" filter row), so UI Automation run
   *inside* the session should be able to read cells as text.
 
