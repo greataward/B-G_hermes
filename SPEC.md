@@ -7,7 +7,8 @@
 ## 1. Purpose
 
 Automate manual data entry for the high-speed RFID label line. The
-operator scans a lot number and marks a roll complete; Hermes writes the
+operator scans each lot when loading it; Hermes notices each finished roll
+and writes the
 resulting numbers into the Production Planner, the QC sheet, and Sage.
 
 **Non-goal (for now):** watching the machine or judging label quality.
@@ -211,9 +212,10 @@ counted as full. The couple of labels lost per splice are **ignored**.
 
 **Roll end:** rolls are a fixed size (e.g. 15,000), and the line stops at
 exactly that count (seen in the Encoprint sample at SN 15000). Hermes
-treats a roll as finished when the work order's count reaches the next
-multiple of the roll size. A `ROLL COMPLETE` barcode card stays as a
-manual override (e.g. a short last roll).
+treats a roll as finished when the work order's count reaches the end of
+that roll's planned quantity (the Planner's Quantity row, e.g. 15,000 per
+roll and a shorter last roll such as 5,000). There is no roll-complete
+scan or button: the operator's only input is the lot scan.
 
 Encoprint counts are a **check on the roll total only**, never on the lot
 split. Encoprint keeps one work order per UPC, not per roll, so the roll's
@@ -231,8 +233,7 @@ Ordered so that cheap-to-fix surfaces are written before the irreversible
 one.
 
 1. **Lot scan** at load — lot number, product code, qty good, timestamp
-2. **Roll end** — Encoprint's count reaches the roll size (or the operator
-   scans the `ROLL COMPLETE` card)
+2. **Roll end** — Encoprint's count reaches the roll's planned quantity
 3. **Read** Encoprint's count for the roll
 4. **Reconcile** — the roll's Encoprint count matches the roll quantity
    within ±10 labels, and the lot arithmetic covers the roll
