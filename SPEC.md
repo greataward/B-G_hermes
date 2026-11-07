@@ -94,7 +94,8 @@ appear without a reload. Both are tabs of the order's Log Sheet workbook
   `11/6`), Lot 1, Qty 1, Lot 2 + Qty 2 if the roll spans two lots (when
   Qty 1 is short the sheet shows a hint like `(add 13,500)` in Qty 2), and
   Initials from a dropdown (`KB P-1` … `KB P-4`, `KB P-HS`; HS = high
-  speed).
+  speed). Ctrl+Alt+L re-applies the row toggles; it only changes what is
+  shown, so Hermes ignores it.
 - **QC file:** one block per UPC, one row per roll, columns qty, Date,
   Ship #, Notes, Tech. Per roll: qty (`15000`), Date (`11/6/2026`), Tech
   from a dropdown (`KB QC-1` … `KB QC-HS`).
@@ -137,13 +138,19 @@ reached by Remote Desktop from the production PC. Entries are
      number in), or use the lookup button.
   4. Qty to Print: type the quantity, Enter. Sage clamps it (see above).
      At this point the row is "pre-loaded".
-  5. Press the row's **Print** button. A **Print Results** dialog asks for
-     Print Count and Scrap Count; enter the quantity and `0`, press Ok.
+  5. Press **Test Print**, then **Print** and Enter, then **Result**. None
+     of these print anything on the high-speed line; they are required
+     clicks. Result opens a **Print Results** dialog asking for Print
+     Count and Scrap Count; enter the quantity and `0`, press Ok.
   6. The row now shows Qty to Print 0 and Qty Already Printed = the
      quantity, and Completed Label % goes up (e.g. `15,000 of 500,000 -
      3.00%`).
-  Step 5 is the point of no return. Hermes reads back after step 4 (the
-  clamped number) and again after step 6.
+  Ok in Print Results is the point of no return. Hermes reads back after
+  step 4 (the clamped number) and again after step 6.
+- **Two-lot rolls:** if the quantity typed for the first lot is more than
+  that lot has left, Sage clamps it and adds a second row for the same
+  roll by itself. Hermes then fills that row with the second lot and its
+  quantity, and finishes both rows the same way.
 - The grid is a .NET grid ("Contains:" filter row), so UI Automation run
   *inside* the session should be able to read cells as text.
 

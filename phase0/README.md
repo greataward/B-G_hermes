@@ -27,10 +27,11 @@ No Hermes code until these are answered. Findings go here with the date.
 - [ ] **Encoprint's own data file:** its log says "The csv data file has
       been updated" at times. Find where (start with CaseSetting → Excel
       Path)
-- [ ] **Sage two-lot roll:** how the second row for the same roll is
-      created
-- [ ] **Sage Print button:** confirm it only records the roll and
-      nothing physically prints
+- [x] **Sage two-lot roll:** Sage adds the second row itself when the
+      typed quantity is more than the first lot has left. (2026-11-07)
+- [x] **Sage Print buttons:** Test Print → Print → Enter → Result; none of
+      them print anything, Result opens the Print Results dialog.
+      (2026-11-07)
 - [x] **Encoprint export** — per-label CSV, generated only on request
       (button in the Work Order panel) into `C:\US001\Finished_report`.
       Sample in `fixtures/200112040-750045001271/`. Roll 1 = exactly
