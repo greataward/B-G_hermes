@@ -59,8 +59,9 @@ No Hermes code until these are answered. Findings go here with the date.
 - [x] **Sage lot remaining:** on Enter, Sage fills the lowest of the
       typed number, the roll's remaining need and the lot's remaining
       quantity. Details in the pending video. (2026-11-06)
-- [ ] **Count tolerance:** how far Encoprint may differ from the lot
-      arithmetic before Hermes halts
+- [x] **Count tolerance:** ±10 labels per roll for now. (2026-11-07)
+- [ ] **Approval:** manager signs off on Python (production PC + Sage
+      computer) and Graph access, using the approval request doc
 
 ## Evidence (2026-11-06, order 200112021, SKU 618842550500)
 

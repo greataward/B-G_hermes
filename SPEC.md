@@ -224,7 +224,7 @@ one.
 2. **Roll complete** — operator marks it (scan a `ROLL COMPLETE` card)
 3. **Read** the Encoprint data for the window
 4. **Reconcile** — Encoprint count agrees with lot arithmetic, within the
-   tolerance in §9
+   tolerance (±10 labels per roll)
 5. **Write Production Planner** (reversible)
 6. **Write QC sheet** (reversible)
 7. **Stage Sage entry** — show exact values, human approves (PoC phase)
@@ -284,13 +284,8 @@ machine. Hand finished rolls to easyQC's Cores tab for core labels.
 ## 9. Open questions
 
 - Can UI Automation read Completed Quantity from the Encoprint window?
-- Count tolerance: how far Encoprint may differ from the arithmetic
-  before Hermes halts. Splice losses make Encoprint run a few labels
-  short; one snapshot also showed 5 more passes than expected
-- Graph access: an app registration in Microsoft Entra usually needs IT
-  admin consent. Fallbacks: Office Scripts via Power Automate, or driving
-  Excel for the web
-- Can Python be installed on the production PC and the Sage host?
+- Graph access and Python on both machines: allowed in principle,
+  pending manager approval (request doc written 2026-11-07)
 - How Hermes reads a partly used lot's remaining quantity before typing
   (Sage clamps to it on Enter; see video)
 - Exact steps and pop-ups when entering a roll in the Sage Production
